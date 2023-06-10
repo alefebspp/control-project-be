@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Registry {
+  id                      String   @id
+  date                    DateTime
+  start                   String?
+  start_location          String?
+  interval_start          String?
+  interval_start_location String?
+  interval_end            String?
+  interval_end_location   String?
+  end                     String?
+  end_location            String?
+  collaborator_id         String
+
+  @@map("registries")
+}
+
+model Collaborator {
+  id          String   @id
+  name        String
+  surname     String
+  email       String   @unique
+  password    String
+  shift_start DateTime
+  shift_end   DateTime
+
+  @@map("collaborators")
+}
