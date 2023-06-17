@@ -17,6 +17,6 @@ import { PrismaCollaboratorsRepository } from './prisma/prisma-collaborators-rep
       useClass: PrismaCollaboratorsRepository,
     },
   ],
-  exports: [RegistriesRepository, CollaboratorsRepository],
+  exports: [RegistriesRepository, CollaboratorsRepository, PrismaService],
 })
 export class DatabaseModule {}
