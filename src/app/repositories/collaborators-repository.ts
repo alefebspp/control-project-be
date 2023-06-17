@@ -1,10 +1,12 @@
 import { Collaborator } from '../entities/collaborator/collaborator';
 
-export interface FindCollaboratorResponse
+export interface CollaboratorInfo
   extends Omit<Collaborator, '_id' | 'props' | 'shiftStart' | 'shiftEnd'> {}
 
 export abstract class CollaboratorsRepository {
   abstract create(collaborator: Collaborator): Promise<void>;
 
-  abstract find(collaboratorId: string): Promise<FindCollaboratorResponse>;
+  abstract find(collaboratorId: string): Promise<CollaboratorInfo>;
+
+  abstract findByEmail(email: string): Promise<CollaboratorInfo>;
 }

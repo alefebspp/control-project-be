@@ -1,9 +1,15 @@
 import { Collaborator } from '@app/entities/collaborator/collaborator';
-import { CollaboratorsRepository } from '@app/repositories/collaborators-repository';
+import {
+  CollaboratorsRepository,
+  CollaboratorInfo,
+} from '@app/repositories/collaborators-repository';
 
 export class InMemoryCollaboratorsRepository
   implements CollaboratorsRepository
 {
+  findByEmail(email: string): Promise<CollaboratorInfo> {
+    throw new Error('Method not implemented.');
+  }
   public collaborators: Collaborator[] = [];
 
   async find(collaboratorId: string): Promise<Collaborator> {
