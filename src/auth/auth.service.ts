@@ -1,5 +1,5 @@
 import { CollaboratorsRepository } from '@app/repositories/collaborators-repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Collaborator } from '@app/entities/collaborator/collaborator';
@@ -18,13 +18,19 @@ export class AuthService {
     );
 
     if (!collaborator) {
-      return;
+      throw new NotFoundException('E-mail e/ou senha incorretos', {
+        cause: new Error(),
+        description: 'E-mail e/ou senha incorretos',
+      });
     }
 
     const isPasswordCorrect = compareSync(password, collaborator.password);
 
     if (!isPasswordCorrect) {
-      return;
+      throw new NotFoundException('E-mail e/ou senha incorretos', {
+        cause: new Error(),
+        description: 'E-mail e/ou senha incorretos',
+      });
     }
 
     return collaborator;
@@ -39,6 +45,7 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
+      user: payload,
     };
   }
 }
