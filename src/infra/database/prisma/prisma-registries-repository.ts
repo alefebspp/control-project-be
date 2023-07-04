@@ -12,6 +12,16 @@ import { UpdateRegistryDTO } from 'src/infra/http/dtos/registries/update-registr
 export class PrismaRegistriesRepository implements RegistriesRepository {
   constructor(private prismaService: PrismaService) {}
 
+  async find(registryId: string): Promise<DefaultRegistryResponse> {
+    const registry = await this.prismaService.registry.findUnique({
+      where: {
+        id: registryId,
+      },
+    });
+
+    return registry;
+  }
+
   async update(
     registryId: string,
     data: UpdateRegistryDTO,
@@ -51,6 +61,9 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
     }
     const registries = await this.prismaService.registry.findMany({
       where,
+      orderBy: {
+        date: 'asc',
+      },
     });
 
     return registries;
@@ -64,7 +77,11 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
   }
 
   async list(): Promise<ListRegistriesResponse[]> {
-    const registries = await this.prismaService.registry.findMany();
+    const registries = await this.prismaService.registry.findMany({
+      orderBy: {
+        date: 'asc',
+      },
+    });
 
     return registries;
   }
