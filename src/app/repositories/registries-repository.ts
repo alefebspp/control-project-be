@@ -15,6 +15,8 @@ export abstract class RegistriesRepository {
     data: UpdateRegistryDTO,
   ): Promise<DefaultRegistryResponse>;
 
+  abstract find(registryId: string): Promise<DefaultRegistryResponse>;
+
   abstract findCollaboratorRegistries(
     collaboratorId: string,
     date: string | undefined,

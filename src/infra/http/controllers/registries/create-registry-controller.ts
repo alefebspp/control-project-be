@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreateRegistryDTO } from '../../dtos/registries/create-registry.dto';
 import { CreateRegistry } from '@app/useCases/registry/create-registry/create-registry';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 interface Response {
   date: Date;
@@ -14,6 +15,7 @@ interface Response {
 export class CreateRegistryController {
   constructor(private readonly createRegistry: CreateRegistry) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Body() body: CreateRegistryDTO): Promise<Response> {
     const {

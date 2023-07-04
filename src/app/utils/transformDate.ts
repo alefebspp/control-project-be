@@ -27,3 +27,26 @@ export const getHoursDifferenceBetweenDates = (
 
   return differenceInHours;
 };
+
+export const resetDateTime = (date: Date | undefined) => {
+  if (date) {
+    const newDate = new Date(date);
+    newDate.setUTCHours(0, 0, 0, 0);
+    return newDate;
+  }
+};
+
+function formatDateISOString(ISOString: string) {
+  const splitedISOString = ISOString.split('T');
+  const formatedString = splitedISOString[0];
+  return formatedString;
+}
+
+export function checkIfCurrentDateEqualsRegistryDate(registryDate: Date) {
+  const actualDateString = formatDateISOString(
+    resetDateTime(new Date()).toISOString(),
+  );
+  const registryDateString = formatDateISOString(registryDate.toISOString());
+
+  return actualDateString == registryDateString;
+}

@@ -6,9 +6,31 @@ import {
 } from '@app/repositories/registries-repository';
 
 export class InMemoryRegistriesRepository implements RegistriesRepository {
-  update(registryId: string, data: UpdateRegistryDTO): Promise<void> {
-    throw new Error('Method not implemented.');
+  public registries: Registry[] = [];
+
+  async update(
+    registryId: string,
+    data: UpdateRegistryDTO,
+  ): Promise<DefaultRegistryResponse> {
+    const registry = this.registries.find(
+      (registry) => registry.id == registryId,
+    );
+
+    for (const key in data) {
+      registry[key] = data[key];
+    }
+
+    return registry;
   }
+
+  async find(registryId: string): Promise<DefaultRegistryResponse> {
+    const registry = this.registries.find(
+      (registry) => registry.id == registryId,
+    );
+
+    return registry;
+  }
+
   findCollaboratorRegistries(
     collaboratorId: string,
     day: string,
@@ -28,7 +50,6 @@ export class InMemoryRegistriesRepository implements RegistriesRepository {
   ): Promise<DefaultRegistryResponse> {
     throw new Error('Method not implemented.');
   }
-  public registries: Registry[] = [];
 
   async create(registry: Registry): Promise<void> {
     this.registries.push(registry);
