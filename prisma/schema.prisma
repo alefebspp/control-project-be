@@ -23,7 +23,38 @@ model Registry {
   end_location            String?
   collaborator_id         String
 
+  request Request[]
+
   @@map("registries")
+}
+
+enum StatusType {
+  REJECTED
+  ACCEPTED
+  PENDING
+}
+
+model Request {
+  id                String     @id
+  registry_id       String
+  collaborator_id   String
+  status            StatusType @default(PENDING)
+  reason            String
+  registry_type     String
+  new_value         String
+  previous_value    String?
+  registry_location String?
+  new_location      String
+  reviewer          String?
+  reviewer_response String?
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  registry         Registry?     @relation(fields: [registry_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  collaborator     Collaborator? @relation("CollaboratorRequest", fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  request_reviewer Collaborator? @relation("ReviewerRequest", fields: [reviewer], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("requests")
 }
 
 model Collaborator {
@@ -34,6 +65,9 @@ model Collaborator {
   password    String
   shift_start DateTime
   shift_end   DateTime
+
+  collaborator_requests Request[] @relation("CollaboratorRequest")
+  reviewer_responses    Request[] @relation("ReviewerRequest")
 
   @@map("collaborators")
 }
