@@ -1,5 +1,10 @@
 import { RegistriesRepository } from '@app/repositories/registries-repository';
-import { Injectable } from '@nestjs/common';
+import { checkIfCurrentDateEqualsRegistryDate } from '@app/utils/transformDate';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 
 interface UpdateRegistryProps {
   registry_id: string;
@@ -20,8 +25,33 @@ export class UpdateRegistry {
   constructor(private registriesRepository: RegistriesRepository) {}
 
   async execute({ registry_id, data }: UpdateRegistryProps) {
-    const registry = await this.registriesRepository.update(registry_id, data);
+    const registry = await this.registriesRepository.find(registry_id);
 
-    return registry;
+    if (!registry) {
+      throw new NotFoundException('Could not find registry', {
+        cause: new Error(),
+        description: 'Does not exists a registry with the informed id',
+      });
+    }
+
+    //TODO: implement a way of adjustments dont pass through this verification
+    // const currentDateEqualsRegistryDate = checkIfCurrentDateEqualsRegistryDate(
+    //   registry.date,
+    // );
+
+    // if (!currentDateEqualsRegistryDate) {
+    //   throw new BadRequestException('Cannot update registry', {
+    //     cause: new Error(),
+    //     description:
+    //       'Current date is different than registry date.Make a request',
+    //   });
+    // }
+
+    const updatedRegistry = await this.registriesRepository.update(
+      registry_id,
+      data,
+    );
+
+    return updatedRegistry;
   }
 }
