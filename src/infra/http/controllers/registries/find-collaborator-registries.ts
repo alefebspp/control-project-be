@@ -1,5 +1,6 @@
 import { FindCollaboratorRegistries } from '@app/useCases/registry/find-collaborator-registry/find-collaborator-registries';
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 interface FindCollaboratorResgistriesQueryParams {
   date?: string;
@@ -9,6 +10,7 @@ interface FindCollaboratorResgistriesQueryParams {
 export class FindCollaboratorRegistryController {
   constructor(private findCollaboratorRegistries: FindCollaboratorRegistries) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:collaboratorId')
   async find(
     @Param('collaboratorId') collaboratorId: string,
@@ -21,10 +23,6 @@ export class FindCollaboratorRegistryController {
       date,
     );
 
-    if (date) {
-      return registry[0];
-    } else {
-      return registry;
-    }
+    return registry;
   }
 }
