@@ -5,8 +5,10 @@ interface CollaboratorProps {
   surname: string;
   password: string;
   email: string;
-  shift_start: Date;
-  shift_end: Date;
+  shift_start: string;
+  shift_end: string;
+  interval_start: string;
+  interval_end: string;
 }
 
 export class Collaborator {
@@ -38,11 +40,19 @@ export class Collaborator {
     return this.props.password;
   }
 
-  public get shiftStart() {
+  public get shift_start() {
     return this.props.shift_start;
   }
 
-  public get shiftEnd() {
+  public get interval_start() {
+    return this.props.interval_start;
+  }
+
+  public get shift_end() {
     return this.props.shift_end;
+  }
+
+  public get interval_end() {
+    return this.props.interval_end;
   }
 }

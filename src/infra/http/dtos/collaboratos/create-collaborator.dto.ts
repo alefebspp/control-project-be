@@ -10,7 +10,11 @@ export class CreateCollaboratorDTO {
   @IsNotEmpty()
   password: string;
   @IsNotEmpty()
-  shift_start: Date;
+  shift_start: string;
   @IsNotEmpty()
-  shift_end: Date;
+  shift_end: string;
+  @IsNotEmpty()
+  interval_start: string;
+  @IsNotEmpty()
+  interval_end: string;
 }
