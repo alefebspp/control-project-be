@@ -31,11 +31,22 @@ export class InMemoryRegistriesRepository implements RegistriesRepository {
     return registry;
   }
 
-  findCollaboratorRegistries(
+  async findCollaboratorRegistries(
     collaboratorId: string,
     day: string,
+    period: string,
   ): Promise<DefaultRegistryResponse[]> {
-    throw new Error('Method not implemented.');
+    if (period) {
+      const registries = await this.registries.filter((registry) => {
+        return registry.date.toISOString().includes(period);
+      });
+      return registries;
+    }
+
+    const registries = await this.registries.filter(
+      (registry) => registry.collaborator_id == collaboratorId,
+    );
+    return registries;
   }
   async findCollaboratorRegistry(
     collaboratorId: string,
