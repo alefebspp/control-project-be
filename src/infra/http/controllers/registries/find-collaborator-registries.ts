@@ -4,6 +4,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 interface FindCollaboratorResgistriesQueryParams {
   date?: string;
+  period?: string;
 }
 
 @Controller('registry')
@@ -16,11 +17,12 @@ export class FindCollaboratorRegistryController {
     @Param('collaboratorId') collaboratorId: string,
     @Query() query: FindCollaboratorResgistriesQueryParams,
   ) {
-    const { date } = query;
+    const { date, period } = query;
 
     const registry = await this.findCollaboratorRegistries.execute(
       collaboratorId,
       date,
+      period,
     );
 
     return registry;
