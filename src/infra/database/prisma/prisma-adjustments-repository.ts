@@ -6,6 +6,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Adjustment } from '@app/entities/adjustment/adjustment';
+import { addMonths } from 'date-fns';
 
 @Injectable()
 export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
@@ -52,8 +53,31 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
     return adjustment;
   }
 
-  async list(): Promise<DefaultAdjustmentResponse[]> {
+  async list(
+    collaborator_id?: string,
+    period?: string,
+  ): Promise<DefaultAdjustmentResponse[]> {
+    let where = {};
+
+    if (collaborator_id) {
+      Object.assign(where, {
+        collaborator_id,
+      });
+    }
+
+    if (period) {
+      const periodDate = new Date(period);
+      const nextMonth = addMonths(periodDate, 1);
+      Object.assign(where, {
+        created_at: {
+          gte: periodDate,
+          lt: nextMonth,
+        },
+      });
+    }
+
     const adjustments = await this.prismaService.request.findMany({
+      where,
       include: {
         registry: true,
         collaborator: {

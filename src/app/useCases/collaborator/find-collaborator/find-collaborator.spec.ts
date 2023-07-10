@@ -18,8 +18,10 @@ describe('Find collaborator with a given id', () => {
     const { collaborator } = await createCollaborator.execute({
       name: 'Alefe',
       surname: 'Bispo',
-      shift_start: new Date('05/16/2023 5:00:00'),
-      shift_end: new Date('05/16/2023 15:00:00'),
+      shift_start: '08:00',
+      shift_end: '18:00',
+      interval_start: '12:00',
+      interval_end: '13:00',
       email: 'test@hotmail.com',
       password: '123',
     });

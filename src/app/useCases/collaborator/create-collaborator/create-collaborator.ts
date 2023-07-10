@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { Collaborator } from '../../../entities/collaborator/collaborator';
 import { CollaboratorsRepository } from '../../../repositories/collaborators-repository';
-
-interface CreateCollaboratorRequest {
-  name: string;
-  surname: string;
-  shift_start: Date;
-  shift_end: Date;
-  email: string;
-  password: string;
-}
+import { CreateCollaboratorDTO } from '@app/dtos/collaborator.dtos';
 
 @Injectable()
 export class CreateCollaborator {
   constructor(private collaboratorsRepository: CollaboratorsRepository) {}
 
-  async execute(request: CreateCollaboratorRequest) {
-    const { name, surname, shift_start, shift_end, email, password } = request;
+  async execute(request: CreateCollaboratorDTO) {
+    const {
+      name,
+      surname,
+      shift_start,
+      shift_end,
+      email,
+      password,
+      interval_start,
+      interval_end,
+    } = request;
 
     const collaborator = new Collaborator({
       name,
@@ -25,6 +26,8 @@ export class CreateCollaborator {
       shift_end,
       email,
       password,
+      interval_end,
+      interval_start,
     });
 
     await this.collaboratorsRepository.create(collaborator);

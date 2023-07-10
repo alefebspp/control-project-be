@@ -7,6 +7,11 @@ export interface ListRegistriesResponse
 export interface DefaultRegistryResponse
   extends Omit<Registry, '_id' | 'props' | 'getDayHoursAndMinutes'> {}
 
+export interface StatisticsResponse {
+  aditionalTotalHours: string;
+  pendingTotalHours: string;
+}
+
 export abstract class RegistriesRepository {
   abstract create(registry: Registry): Promise<void>;
 
@@ -20,6 +25,7 @@ export abstract class RegistriesRepository {
   abstract findCollaboratorRegistries(
     collaboratorId: string,
     date: string | undefined,
+    period: string | undefined,
   ): Promise<DefaultRegistryResponse[]>;
 
   abstract findRegistryByDay(

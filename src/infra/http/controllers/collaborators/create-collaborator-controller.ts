@@ -8,7 +8,16 @@ export class CreateCollaboratorController {
 
   @Post('create')
   async create(@Body() body: CreateCollaboratorDTO) {
-    const { name, surname, email, password, shift_end, shift_start } = body;
+    const {
+      name,
+      surname,
+      email,
+      password,
+      shift_end,
+      shift_start,
+      interval_end,
+      interval_start,
+    } = body;
 
     const { collaborator } = await this.createColaborator.execute({
       name,
@@ -17,6 +26,8 @@ export class CreateCollaboratorController {
       password,
       shift_end,
       shift_start,
+      interval_end,
+      interval_start,
     });
 
     return collaborator;

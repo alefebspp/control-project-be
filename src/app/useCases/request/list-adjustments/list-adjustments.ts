@@ -5,8 +5,11 @@ import { Injectable } from '@nestjs/common';
 export class ListAdjustments {
   constructor(private adjustmentsRepository: AdjustmentsRepository) {}
 
-  async execute() {
-    const adjustments = await this.adjustmentsRepository.list();
+  async execute(collaborator_id?: string, period?: string) {
+    const adjustments = await this.adjustmentsRepository.list(
+      collaborator_id,
+      period,
+    );
 
     return adjustments;
   }

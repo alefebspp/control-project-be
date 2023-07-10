@@ -58,13 +58,15 @@ model Request {
 }
 
 model Collaborator {
-  id          String   @id
-  name        String
-  surname     String
-  email       String   @unique
-  password    String
-  shift_start DateTime
-  shift_end   DateTime
+  id             String @id
+  name           String
+  surname        String
+  email          String @unique
+  password       String
+  shift_start    String
+  shift_end      String
+  interval_start String @default("12:00")
+  interval_end   String @default("13:00")
 
   collaborator_requests Request[] @relation("CollaboratorRequest")
   reviewer_responses    Request[] @relation("ReviewerRequest")

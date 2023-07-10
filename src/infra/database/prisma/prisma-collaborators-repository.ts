@@ -39,8 +39,10 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
         surname: collaborator.surname,
         email: collaborator.email,
         password: hashedPassword,
-        shift_start: collaborator.shiftStart,
-        shift_end: collaborator.shiftEnd,
+        shift_start: collaborator.shift_start,
+        shift_end: collaborator.shift_end,
+        interval_start: collaborator.interval_start,
+        interval_end: collaborator.interval_end,
       },
     });
   }

@@ -1,3 +1,6 @@
+import { Injectable } from '@nestjs/common';
+import { addMonths } from 'date-fns';
+import { resetDateTime } from '@app/utils/transformDate';
 import { Registry } from 'src/app/entities/registry/registry';
 import {
   DefaultRegistryResponse,
@@ -5,7 +8,6 @@ import {
   RegistriesRepository,
 } from 'src/app/repositories/registries-repository';
 import { PrismaService } from './prisma.service';
-import { Injectable } from '@nestjs/common';
 import { UpdateRegistryDTO } from 'src/infra/http/dtos/registries/update-registry.dto';
 
 @Injectable()
@@ -48,10 +50,23 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
   async findCollaboratorRegistries(
     collaboratorId: string,
     date: string | undefined,
+    period: string | undefined,
   ): Promise<DefaultRegistryResponse[]> {
     let where = {
       collaborator_id: collaboratorId,
     };
+
+    if (period) {
+      const periodDate = resetDateTime(new Date(period));
+      const nextMonth = addMonths(periodDate, 1);
+      Object.assign(where, {
+        date: {
+          gte: periodDate,
+          lt: nextMonth,
+        },
+      });
+    }
+
     if (date) {
       Object.assign(where, {
         date: {
