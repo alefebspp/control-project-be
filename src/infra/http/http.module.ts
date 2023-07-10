@@ -22,10 +22,13 @@ import { ValidateAdjustmentController } from './controllers/adjustments/validate
 import { ValidateAdjustment } from '@app/useCases/request/validate-adjustment/validate-adjustment';
 import { FindAdjustmentController } from './controllers/adjustments/find-adjustment-controller';
 import { FindAdjustment } from '@app/useCases/request/find-adjustment/find-adjustment';
+import { CalculateRegistriesHours } from '@app/useCases/registry/calculate-registries-hours/calculate-registries-hours';
+import { CalculateRegistriesHoursController } from './controllers/registries/calculate-registries-hours-controller';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [
+    CalculateRegistriesHoursController,
     FindAdjustmentController,
     ValidateAdjustmentController,
     FindAdjustmentByRegistryIdController,
@@ -39,6 +42,7 @@ import { FindAdjustment } from '@app/useCases/request/find-adjustment/find-adjus
     FindCollaboratorRegistryController,
   ],
   providers: [
+    CalculateRegistriesHours,
     FindAdjustment,
     ValidateAdjustment,
     FindAdjustmentByRegistryId,
