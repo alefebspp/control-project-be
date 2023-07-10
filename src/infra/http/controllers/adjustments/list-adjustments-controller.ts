@@ -1,6 +1,11 @@
 import { ListAdjustments } from '@app/useCases/request/list-adjustments/list-adjustments';
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+
+interface ListAdjustmentsQueryParams {
+  collaboratorId?: string;
+  period?: string;
+}
 
 @Controller('requests')
 export class ListAdjustmentController {
@@ -8,8 +13,13 @@ export class ListAdjustmentController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async list() {
-    const adjustments = await this.listAdjustments.execute();
+  async list(@Query() query: ListAdjustmentsQueryParams) {
+    const { collaboratorId, period } = query;
+
+    const adjustments = await this.listAdjustments.execute(
+      collaboratorId,
+      period,
+    );
 
     return adjustments;
   }
