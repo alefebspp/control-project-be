@@ -11,7 +11,10 @@ export interface DefaultAdjustmentResponse
 export abstract class AdjustmentsRepository {
   abstract create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse>;
 
-  abstract list(): Promise<DefaultAdjustmentResponse[]>;
+  abstract list(
+    collaborator_id?: string,
+    period?: string,
+  ): Promise<DefaultAdjustmentResponse[]>;
 
   abstract find(adjustmentId: string): Promise<DefaultAdjustmentResponse>;
 
