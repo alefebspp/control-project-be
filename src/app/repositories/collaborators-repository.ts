@@ -9,4 +9,9 @@ export abstract class CollaboratorsRepository {
   abstract find(collaboratorId: string): Promise<CollaboratorInfo>;
 
   abstract findByEmail(email: string): Promise<CollaboratorInfo>;
+
+  abstract changeAvatar(
+    fileUrl: string,
+    collaborator_id: string,
+  ): Promise<void>;
 }
