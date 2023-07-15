@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { AdjustmentsRepository } from '@app/repositories/adjustments-repository';
 
 @Injectable()
-export class FindAdjustmentByRegistryId {
+export class CheckAdjustmentExistence {
   constructor(private adjustmentsRepository: AdjustmentsRepository) {}
 
   async execute(registryId: string, registryType: string) {
     const adjustment =
-      await this.adjustmentsRepository.checkIfAdjustmentExistsByRegistry(
+      await this.adjustmentsRepository.checkAdjustmentExistence(
         registryId,
         registryType,
       );
