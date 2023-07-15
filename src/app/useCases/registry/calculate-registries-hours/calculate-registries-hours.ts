@@ -3,7 +3,7 @@ import { RegistriesRepository } from '@app/repositories/registries-repository';
 import {
   subtractRegistries,
   sumRegistries,
-} from '@app/utils/registryOperations';
+} from 'src/shared/utils/registryOperations';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
