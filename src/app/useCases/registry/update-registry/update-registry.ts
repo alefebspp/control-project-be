@@ -1,10 +1,5 @@
 import { RegistriesRepository } from '@app/repositories/registries-repository';
-import { checkIfCurrentDateEqualsRegistryDate } from '@app/utils/transformDate';
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 interface UpdateRegistryProps {
   registry_id: string;
