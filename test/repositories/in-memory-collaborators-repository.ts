@@ -7,6 +7,9 @@ import {
 export class InMemoryCollaboratorsRepository
   implements CollaboratorsRepository
 {
+  changeAvatar(fileUrl: string, collaborator_id: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   findByEmail(email: string): Promise<CollaboratorInfo> {
     throw new Error('Method not implemented.');
   }
