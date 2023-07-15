@@ -14,7 +14,7 @@ export class InMemoryRequestsRepository implements AdjustmentsRepository {
   ): Promise<DefaultAdjustmentResponse> {
     throw new Error('Method not implemented.');
   }
-  checkIfAdjustmentExistsByRegistry(
+  checkAdjustmentExistence(
     registryId: string,
     registryType: string,
   ): Promise<DefaultAdjustmentResponse> {
