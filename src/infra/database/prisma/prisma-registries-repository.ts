@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { addMonths } from 'date-fns';
-import { resetDateTime } from '@app/utils/transformDate';
+import { resetDateTime } from 'src/shared/utils/transformDate';
 import { Registry } from 'src/app/entities/registry/registry';
 import {
   DefaultRegistryResponse,
