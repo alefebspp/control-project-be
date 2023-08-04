@@ -23,7 +23,7 @@ model Registry {
   end_location            String?
   collaborator_id         String
 
-  request Request[]
+  adjustment Adjustment[]
 
   @@map("registries")
 }
@@ -34,7 +34,7 @@ enum StatusType {
   PENDING
 }
 
-model Request {
+model Adjustment {
   id                String     @id
   registry_id       String
   collaborator_id   String
@@ -50,26 +50,27 @@ model Request {
   created_at        DateTime   @default(now())
   updated_at        DateTime   @updatedAt
 
-  registry         Registry?     @relation(fields: [registry_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  collaborator     Collaborator? @relation("CollaboratorRequest", fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  request_reviewer Collaborator? @relation("ReviewerRequest", fields: [reviewer], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  registry            Registry?     @relation(fields: [registry_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  collaborator        Collaborator? @relation("CollaboratorAdjustment", fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  adjustment_reviewer Collaborator? @relation("ReviewerAdjustment", fields: [reviewer], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  @@map("requests")
+  @@map("adjustments")
 }
 
 model Collaborator {
-  id             String @id
+  id             String  @id
   name           String
+  avatar         String?
   surname        String
-  email          String @unique
+  email          String  @unique
   password       String
   shift_start    String
   shift_end      String
-  interval_start String @default("12:00")
-  interval_end   String @default("13:00")
+  interval_start String  @default("12:00")
+  interval_end   String  @default("13:00")
 
-  collaborator_requests Request[] @relation("CollaboratorRequest")
-  reviewer_responses    Request[] @relation("ReviewerRequest")
+  collaborator_adjustment Adjustment[] @relation("CollaboratorAdjustment")
+  reviewer_adjustment     Adjustment[] @relation("ReviewerAdjustment")
 
   @@map("collaborators")
 }

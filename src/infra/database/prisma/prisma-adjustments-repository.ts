@@ -13,7 +13,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   constructor(private prismaService: PrismaService) {}
 
   async find(adjustmentId: string): Promise<DefaultAdjustmentResponse> {
-    const adjustment = await this.prismaService.request.findUnique({
+    const adjustment = await this.prismaService.adjustment.findUnique({
       where: {
         id: adjustmentId,
       },
@@ -25,7 +25,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   async validateAdjustment(
     validateData: ValidateAdjustmentDTO,
   ): Promise<DefaultAdjustmentResponse> {
-    const evaluatedAdjustment = await this.prismaService.request.update({
+    const evaluatedAdjustment = await this.prismaService.adjustment.update({
       where: {
         id: validateData.adjustmentId,
       },
@@ -38,11 +38,11 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
     return evaluatedAdjustment;
   }
 
-  async checkIfAdjustmentExistsByRegistry(
+  async checkAdjustmentExistence(
     registryId: string,
     registryType: string,
   ): Promise<DefaultAdjustmentResponse> {
-    const adjustment = await this.prismaService.request.findFirst({
+    const adjustment = await this.prismaService.adjustment.findFirst({
       where: {
         registry_id: registryId,
         registry_type: registryType,
@@ -76,7 +76,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
       });
     }
 
-    const adjustments = await this.prismaService.request.findMany({
+    const adjustments = await this.prismaService.adjustment.findMany({
       where,
       include: {
         registry: true,
@@ -87,7 +87,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
             surname: true,
           },
         },
-        request_reviewer: {
+        adjustment_reviewer: {
           select: {
             id: true,
             name: true,
@@ -101,7 +101,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   }
 
   async create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse> {
-    const newAdjustment = await this.prismaService.request.create({
+    const newAdjustment = await this.prismaService.adjustment.create({
       data: {
         new_value: adjustment.new_value,
         previous_value: adjustment.previous_value,

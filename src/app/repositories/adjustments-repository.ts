@@ -22,7 +22,7 @@ export abstract class AdjustmentsRepository {
     validateData: ValidateAdjustmentDTO,
   ): Promise<DefaultAdjustmentResponse>;
 
-  abstract checkIfAdjustmentExistsByRegistry(
+  abstract checkAdjustmentExistence(
     registryId: string,
     registryType: string | undefined,
   ): Promise<DefaultAdjustmentResponse>;

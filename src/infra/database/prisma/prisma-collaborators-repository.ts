@@ -10,6 +10,16 @@ import { hash } from 'bcrypt';
 @Injectable()
 export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
   constructor(private prismaService: PrismaService) {}
+  async changeAvatar(fileUrl: string, collaborator_id: string): Promise<void> {
+    const newCollaboratorAvatar = await this.prismaService.collaborator.update({
+      where: {
+        id: collaborator_id,
+      },
+      data: {
+        avatar: fileUrl,
+      },
+    });
+  }
 
   async findByEmail(email: string): Promise<CollaboratorInfo> {
     const collaborator = await this.prismaService.collaborator.findUnique({

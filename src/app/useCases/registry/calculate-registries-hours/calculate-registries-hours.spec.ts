@@ -5,7 +5,7 @@ import { InMemoryRegistriesRepository } from '@test/repositories/in-memory-regis
 import {
   subtractRegistries,
   sumRegistries,
-} from '@app/utils/registryOperations';
+} from 'src/shared/utils/registryOperations';
 import { FindCollaboratorRegistries } from '../find-collaborator-registry/find-collaborator-registries';
 
 describe('Calculate registries hours', () => {

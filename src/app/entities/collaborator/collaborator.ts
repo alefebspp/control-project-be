@@ -9,6 +9,7 @@ interface CollaboratorProps {
   shift_end: string;
   interval_start: string;
   interval_end: string;
+  avatar?: string | null;
 }
 
 export class Collaborator {
@@ -54,5 +55,9 @@ export class Collaborator {
 
   public get interval_end() {
     return this.props.interval_end;
+  }
+
+  public get avatar() {
+    return this.props.avatar;
   }
 }
