@@ -41,6 +41,10 @@ export class Collaborator {
     return this.props.password;
   }
 
+  public set password(password: string) {
+    this.props.password = password;
+  }
+
   public get shift_start() {
     return this.props.shift_start;
   }

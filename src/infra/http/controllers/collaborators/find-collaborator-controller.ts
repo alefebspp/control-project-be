@@ -2,7 +2,7 @@ import { FindCollaborator } from '@app/useCases/collaborator/find-collaborator/f
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('collaborator')
+@Controller('collaborator/find')
 export class FindCollaboratorController {
   constructor(private findCollaborator: FindCollaborator) {}
 

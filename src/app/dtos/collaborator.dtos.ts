@@ -8,3 +8,13 @@ export interface CreateCollaboratorDTO {
   email: string;
   password: string;
 }
+
+export interface UpdateCollaboratorDTO {
+  name?: string;
+  surname?: string;
+  shift_start?: string;
+  shift_end?: string;
+  interval_start?: string;
+  interval_end?: string;
+  email?: string;
+}
