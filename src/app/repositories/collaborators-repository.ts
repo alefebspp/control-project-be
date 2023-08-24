@@ -16,7 +16,7 @@ export abstract class CollaboratorsRepository {
 
   abstract findByEmail(email: string): Promise<CollaboratorInfo>;
 
-  abstract list(): Promise<CollaboratorInfo[]>;
+  abstract list(companyId: string): Promise<CollaboratorInfo[]>;
 
   abstract delete(collaboratorId: string): Promise<void>;
 

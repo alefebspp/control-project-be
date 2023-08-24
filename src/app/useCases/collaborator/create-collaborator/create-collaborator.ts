@@ -17,6 +17,9 @@ export class CreateCollaborator {
       password,
       interval_start,
       interval_end,
+      admin,
+      company_id,
+      manager,
     } = request;
 
     const collaborator = new Collaborator({
@@ -28,6 +31,9 @@ export class CreateCollaborator {
       password,
       interval_end,
       interval_start,
+      admin,
+      company_id,
+      manager,
     });
 
     await this.collaboratorsRepository.create(collaborator);

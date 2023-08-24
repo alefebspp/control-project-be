@@ -10,6 +10,9 @@ interface CollaboratorProps {
   interval_start: string;
   interval_end: string;
   avatar?: string | null;
+  admin?: boolean;
+  manager?: boolean;
+  company_id?: string;
 }
 
 export class Collaborator {
@@ -63,5 +66,17 @@ export class Collaborator {
 
   public get avatar() {
     return this.props.avatar;
+  }
+
+  public get admin() {
+    return this.props.admin;
+  }
+
+  public get manager() {
+    return this.props.manager;
+  }
+
+  public get company_id() {
+    return this.props.company_id;
   }
 }

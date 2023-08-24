@@ -13,6 +13,7 @@ interface CreateRegistryRequest {
   interval_end?: string;
   interval_end_location?: string;
   collaborator_id: string;
+  company_id: string;
 }
 
 @Injectable()
@@ -30,6 +31,7 @@ export class CreateRegistry {
       interval_start_location,
       collaborator_id,
       date,
+      company_id,
     } = request;
 
     const newDate = new Date(date);
@@ -46,6 +48,7 @@ export class CreateRegistry {
       interval_start,
       interval_start_location,
       collaborator_id,
+      company_id,
     });
 
     await this.registriesRepository.create(registry);

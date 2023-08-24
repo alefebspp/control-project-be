@@ -12,6 +12,7 @@ export abstract class AdjustmentsRepository {
   abstract create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse>;
 
   abstract list(
+    company_id?: string,
     collaborator_id?: string,
     period?: string,
   ): Promise<DefaultAdjustmentResponse[]>;

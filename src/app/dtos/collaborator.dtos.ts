@@ -7,6 +7,9 @@ export interface CreateCollaboratorDTO {
   interval_end: string;
   email: string;
   password: string;
+  admin?: boolean;
+  manager?: boolean;
+  company_id?: string;
 }
 
 export interface UpdateCollaboratorDTO {
@@ -17,4 +20,5 @@ export interface UpdateCollaboratorDTO {
   interval_start?: string;
   interval_end?: string;
   email?: string;
+  manager?: boolean;
 }

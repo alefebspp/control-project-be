@@ -11,6 +11,7 @@ interface RegistryProps {
   end?: string;
   end_location?: string;
   collaborator_id: string;
+  company_id: string;
 }
 
 export class Registry {
@@ -32,6 +33,14 @@ export class Registry {
 
   public set collaborator_id(collaborator_id: string) {
     this.props.collaborator_id = collaborator_id;
+  }
+
+  public get company_id() {
+    return this.props.company_id;
+  }
+
+  public set company_id(company_id: string) {
+    this.props.company_id = company_id;
   }
 
   public get date() {

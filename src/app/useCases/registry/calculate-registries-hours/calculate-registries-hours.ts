@@ -1,10 +1,11 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CollaboratorsRepository } from '@app/repositories/collaborators-repository';
 import { RegistriesRepository } from '@app/repositories/registries-repository';
 import {
   subtractRegistries,
   sumRegistries,
 } from 'src/shared/utils/registryOperations';
-import { Injectable } from '@nestjs/common';
+import { monthMap } from 'src/shared/utils/maps';
 
 @Injectable()
 export class CalculateRegistriesHours {
@@ -13,12 +14,22 @@ export class CalculateRegistriesHours {
     private collaboratorRepository: CollaboratorsRepository,
   ) {}
   async execute(collaborator_id: string, period: string) {
+    const periodMonth = period.split('-')[1];
     let aditionalTotalHours: string = '00:00';
     let pendingTotalHours: string = '00:00';
 
-    const { shift_end, shift_start } = await this.collaboratorRepository.find(
+    const collaborator = await this.collaboratorRepository.find(
       collaborator_id,
     );
+
+    if (!collaborator) {
+      throw new NotFoundException('Could not find collaborator', {
+        cause: new Error(),
+        description: 'Does not exists a collaborator with the informed id',
+      });
+    }
+
+    const { shift_end, shift_start } = collaborator;
 
     const collaboratorDayTotalTime = subtractRegistries(shift_end, shift_start);
 
@@ -69,8 +80,15 @@ export class CalculateRegistriesHours {
     });
 
     return {
-      aditionalTotalHours,
-      pendingTotalHours,
+      aditionalHours: {
+        value: Number(aditionalTotalHours.replace(':', '.')),
+        label: aditionalTotalHours,
+      },
+      pendingHours: {
+        value: Number(pendingTotalHours.replace(':', '.')),
+        label: pendingTotalHours,
+      },
+      monthLabel: monthMap[periodMonth],
     };
   }
 }

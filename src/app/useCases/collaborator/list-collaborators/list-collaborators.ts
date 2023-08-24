@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 export class ListCollaborators {
   constructor(private collaboratorsRepository: CollaboratorsRepository) {}
 
-  async execute() {
-    const collaborators = await this.collaboratorsRepository.list();
+  async execute(companyId: string) {
+    const collaborators = await this.collaboratorsRepository.list(companyId);
 
     collaborators.map((collaborator) => {
       delete collaborator.password;

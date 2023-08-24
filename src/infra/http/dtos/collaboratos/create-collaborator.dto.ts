@@ -17,4 +17,6 @@ export class CreateCollaboratorDTO {
   interval_start: string;
   @IsNotEmpty()
   interval_end: string;
+  admin?: boolean;
+  company_id?: string;
 }

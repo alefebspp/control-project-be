@@ -6,6 +6,8 @@ import { CollaboratorsRepository } from 'src/app/repositories/collaborators-repo
 import { PrismaCollaboratorsRepository } from './prisma/prisma-collaborators-repository';
 import { AdjustmentsRepository } from '@app/repositories/adjustments-repository';
 import { PrismaAdjustmentsRepository } from './prisma/prisma-adjustments-repository';
+import { CompaniesRepository } from '@app/repositories/companies-repository';
+import { PrismaCompaniesRepository } from './prisma/prisma-companies-repository';
 
 @Module({
   providers: [
@@ -22,11 +24,16 @@ import { PrismaAdjustmentsRepository } from './prisma/prisma-adjustments-reposit
       provide: AdjustmentsRepository,
       useClass: PrismaAdjustmentsRepository,
     },
+    {
+      provide: CompaniesRepository,
+      useClass: PrismaCompaniesRepository,
+    },
   ],
   exports: [
     RegistriesRepository,
     CollaboratorsRepository,
     AdjustmentsRepository,
+    CompaniesRepository,
     PrismaService,
   ],
 })

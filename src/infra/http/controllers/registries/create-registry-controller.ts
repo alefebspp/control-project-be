@@ -18,30 +18,8 @@ export class CreateRegistryController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Body() body: CreateRegistryDTO): Promise<Response> {
-    const {
-      start,
-      start_location,
-      interval_start,
-      interval_start_location,
-      interval_end,
-      interval_end_location,
-      end,
-      end_location,
-      date,
-      collaborator_id,
-    } = body;
-
     const { registry } = await this.createRegistry.execute({
-      date,
-      start,
-      start_location,
-      interval_start,
-      interval_start_location,
-      interval_end,
-      interval_end_location,
-      end,
-      end_location,
-      collaborator_id,
+      ...body,
     });
 
     return registry;

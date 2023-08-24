@@ -33,14 +33,7 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
         id: registryId,
       },
       data: {
-        start: data.start,
-        start_location: data.start_location,
-        end: data.end,
-        end_location: data.end_location,
-        interval_start: data.interval_start,
-        interval_start_location: data.interval_start_location,
-        interval_end: data.interval_end,
-        interval_end_location: data.interval_end_location,
+        ...data,
       },
     });
 
@@ -84,17 +77,16 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
     return registries;
   }
 
-  findRegistryByDay(
-    collaboratorId: string,
-    day: string,
-  ): Promise<DefaultRegistryResponse> {
-    throw new Error('Method not implemented.');
-  }
-
-  async list(): Promise<ListRegistriesResponse[]> {
+  async list(company_id: string): Promise<ListRegistriesResponse[]> {
     const registries = await this.prismaService.registry.findMany({
+      where: {
+        company_id,
+      },
       orderBy: {
         date: 'asc',
+      },
+      include: {
+        collaborator: true,
       },
     });
 
@@ -115,6 +107,7 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
         interval_start: registry.interval_start,
         interval_start_location: registry.interval_start_location,
         collaborator_id: registry.collaborator_id,
+        company_id: registry.company_id,
       },
     });
   }

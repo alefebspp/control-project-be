@@ -33,6 +33,29 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
         status: validateData.newStatus,
         reviewer: validateData.reviewer,
       },
+      include: {
+        registry: true,
+        collaborator: {
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+            avatar: true,
+            shift_start: true,
+            shift_end: true,
+            interval_start: true,
+            interval_end: true,
+          },
+        },
+        adjustment_reviewer: {
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+            avatar: true,
+          },
+        },
+      },
     });
 
     return evaluatedAdjustment;
@@ -54,6 +77,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   }
 
   async list(
+    company_id?: string,
     collaborator_id?: string,
     period?: string,
   ): Promise<DefaultAdjustmentResponse[]> {
@@ -62,6 +86,12 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
     if (collaborator_id) {
       Object.assign(where, {
         collaborator_id,
+      });
+    }
+
+    if (company_id) {
+      Object.assign(where, {
+        company_id,
       });
     }
 
@@ -85,6 +115,11 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
             id: true,
             name: true,
             surname: true,
+            avatar: true,
+            shift_start: true,
+            shift_end: true,
+            interval_start: true,
+            interval_end: true,
           },
         },
         adjustment_reviewer: {
@@ -92,6 +127,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
             id: true,
             name: true,
             surname: true,
+            avatar: true,
           },
         },
       },
@@ -112,6 +148,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
         registry_type: adjustment.registry_type,
         registry_id: adjustment.registry_id,
         collaborator_id: adjustment.collaborator_id,
+        company_id: adjustment.company_id,
       },
     });
 

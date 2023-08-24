@@ -20,6 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       user_email: payload.user_email,
       user_name: payload.user_name,
       user_surname: payload.user_surname,
+      is_admin: payload.is_admin,
+      user_company: payload.user_company,
     };
   }
 }

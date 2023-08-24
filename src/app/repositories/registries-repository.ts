@@ -28,9 +28,5 @@ export abstract class RegistriesRepository {
     period: string | undefined,
   ): Promise<DefaultRegistryResponse[]>;
 
-  abstract findRegistryByDay(
-    collaboratorId: string,
-    day: string,
-  ): Promise<DefaultRegistryResponse>;
-  abstract list(): Promise<ListRegistriesResponse[]>;
+  abstract list(companyId: string): Promise<ListRegistriesResponse[]>;
 }

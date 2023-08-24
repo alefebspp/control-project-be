@@ -22,4 +22,6 @@ export class CreateRegistryDTO {
 
   @IsNotEmpty()
   collaborator_id: string;
+  @IsNotEmpty()
+  company_id: string;
 }

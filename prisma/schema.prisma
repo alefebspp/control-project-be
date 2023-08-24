@@ -22,8 +22,11 @@ model Registry {
   end                     String?
   end_location            String?
   collaborator_id         String
+  company_id              String?
 
-  adjustment Adjustment[]
+  adjustment   Adjustment[]
+  collaborator Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  company      Company?      @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("registries")
 }
@@ -38,6 +41,7 @@ model Adjustment {
   id                String     @id
   registry_id       String
   collaborator_id   String
+  company_id        String
   status            StatusType @default(PENDING)
   reason            String
   registry_type     String
@@ -51,6 +55,7 @@ model Adjustment {
   updated_at        DateTime   @updatedAt
 
   registry            Registry?     @relation(fields: [registry_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  company             Company?      @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
   collaborator        Collaborator? @relation("CollaboratorAdjustment", fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
   adjustment_reviewer Collaborator? @relation("ReviewerAdjustment", fields: [reviewer], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
@@ -58,19 +63,41 @@ model Adjustment {
 }
 
 model Collaborator {
-  id             String  @id
+  id             String   @id
   name           String
   avatar         String?
   surname        String
-  email          String  @unique
+  email          String   @unique
   password       String
   shift_start    String
   shift_end      String
-  interval_start String  @default("12:00")
-  interval_end   String  @default("13:00")
+  interval_start String   @default("12:00")
+  interval_end   String   @default("13:00")
+  company_id     String?
+  admin          Boolean  @default(false)
+  manager        Boolean  @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
+  registries              Registry[]
   collaborator_adjustment Adjustment[] @relation("CollaboratorAdjustment")
   reviewer_adjustment     Adjustment[] @relation("ReviewerAdjustment")
+  company                 Company?     @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("collaborators")
+}
+
+model Company {
+  id         String   @id
+  name       String
+  email      String   @unique
+  logo       String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  collaborators Collaborator[] @relation()
+  registries    Registry[]
+  Adjustment    Adjustment[]
+
+  @@map("companies")
 }

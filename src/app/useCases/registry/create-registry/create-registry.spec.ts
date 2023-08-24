@@ -13,6 +13,7 @@ describe('Create registry use case', () => {
       interval_end: '10:00:00',
       end: '16:00:00',
       collaborator_id: 'colaborator-id',
+      company_id: 'collaborator-company',
     });
 
     expect(registriesRepository.registries[0]).toEqual(registry);

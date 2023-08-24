@@ -4,6 +4,7 @@ export interface CreateAdjustmentDTO {
   registry_id: string;
   status?: StatusType;
   collaborator_id: string;
+  company_id: string;
   reason: string;
   registry_type: string;
   registry_location?: string;

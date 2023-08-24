@@ -8,28 +8,8 @@ export class CreateAdjustmentController {
 
   @Post()
   async create(@Body() body: CreateAdjustmentDTO) {
-    const {
-      reason,
-      registry_id,
-      registry_location,
-      registry_type,
-      status,
-      new_value,
-      collaborator_id,
-      previous_value,
-      new_location,
-    } = body;
-
     const adjustment = await this.createAdjustment.execute({
-      reason,
-      registry_id,
-      registry_location,
-      registry_type,
-      status,
-      new_value,
-      collaborator_id,
-      previous_value,
-      new_location,
+      ...body,
     });
 
     return adjustment;

@@ -5,6 +5,7 @@ export type StatusType = 'PENDING' | 'REJECTED' | 'ACCEPTED';
 interface AdjustmentProps {
   registry_id: string;
   collaborator_id: string;
+  company_id: string;
   status?: StatusType;
   reason: string;
   registry_type: string;
@@ -75,6 +76,14 @@ export class Adjustment {
 
   public set collaborator_id(collaborator_id: string) {
     this.props.collaborator_id = collaborator_id;
+  }
+
+  public get company_id() {
+    return this.props.company_id;
+  }
+
+  public set company_id(company_id: string) {
+    this.props.company_id = company_id;
   }
 
   public get registry_type() {

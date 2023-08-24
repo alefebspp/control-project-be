@@ -28,6 +28,7 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
         shift_end: data.shift_end,
         interval_start: data.interval_start,
         interval_end: data.interval_end,
+        manager: data.manager,
       },
     });
 
@@ -44,8 +45,12 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
     });
   }
 
-  async list(): Promise<CollaboratorInfo[]> {
-    const collaborators = await this.prismaService.collaborator.findMany();
+  async list(companyId: string): Promise<CollaboratorInfo[]> {
+    const collaborators = await this.prismaService.collaborator.findMany({
+      where: {
+        company_id: companyId,
+      },
+    });
 
     return collaborators;
   }
@@ -76,8 +81,6 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
       },
     });
 
-    delete collaborator.password;
-
     return collaborator;
   }
 
@@ -95,6 +98,9 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
         shift_end: collaborator.shift_end,
         interval_start: collaborator.interval_start,
         interval_end: collaborator.interval_end,
+        admin: collaborator.admin,
+        company_id: collaborator.company_id,
+        manager: collaborator.manager,
       },
     });
   }

@@ -6,6 +6,8 @@ export class CreateAdjustmentDTO {
   registry_id: string;
   @IsNotEmpty()
   collaborator_id: string;
+  @IsNotEmpty()
+  company_id: string;
   status: StatusType;
   @IsNotEmpty()
   reason: string;

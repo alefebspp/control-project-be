@@ -9,15 +9,7 @@ export class CreateAdjustment {
 
   async execute(data: CreateAdjustmentDTO) {
     const adjustment = new Adjustment({
-      registry_id: data.registry_id,
-      reason: data.reason,
-      registry_location: data.registry_location,
-      new_location: data.new_location,
-      registry_type: data.registry_type,
-      status: data.status,
-      new_value: data.new_value,
-      previous_value: data.previous_value,
-      collaborator_id: data.collaborator_id,
+      ...data,
     });
 
     const newAdjustment = await this.adjustmentsRepository.create(adjustment);
