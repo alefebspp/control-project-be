@@ -6,6 +6,8 @@ interface ListAdjustmentsQueryParams {
   collaboratorId?: string;
   companyId?: string;
   period?: string;
+  collaboratorName?: string;
+  skip?: number;
 }
 
 @Controller('requests')
@@ -15,14 +17,18 @@ export class ListAdjustmentController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async list(@Query() query: ListAdjustmentsQueryParams) {
-    const { companyId, collaboratorId, period } = query;
+    const { companyId, collaboratorId, period, collaboratorName, skip } = query;
 
     const adjustments = await this.listAdjustments.execute(
       companyId,
       collaboratorId,
       period,
+      collaboratorName,
+      skip,
     );
 
-    return adjustments;
+    return {
+      ...adjustments,
+    };
   }
 }

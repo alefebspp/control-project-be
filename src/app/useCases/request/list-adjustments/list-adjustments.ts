@@ -9,11 +9,15 @@ export class ListAdjustments {
     company_id?: string,
     collaborator_id?: string,
     period?: string,
+    collaborator_name?: string,
+    skip?: number,
   ) {
     const adjustments = await this.adjustmentsRepository.list(
       company_id,
       collaborator_id,
       period,
+      collaborator_name,
+      skip,
     );
 
     return adjustments;

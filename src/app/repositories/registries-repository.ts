@@ -1,8 +1,13 @@
 import { UpdateRegistryDTO } from '@app/dtos/registry.dtos';
 import { Registry } from '../entities/registry/registry';
+import { Collaborator } from '@app/entities/collaborator/collaborator';
 
-export interface ListRegistriesResponse
-  extends Omit<Registry, '_id' | 'props' | 'getDayHoursAndMinutes'> {}
+export interface ListRegistriesResponse {
+  registries: (Omit<Registry, 'props' | 'getDayHoursAndMinutes'> & {
+    collaborator: Omit<Collaborator, '_id' | 'props'>;
+  })[];
+  count?: number;
+}
 
 export interface DefaultRegistryResponse
   extends Omit<Registry, '_id' | 'props' | 'getDayHoursAndMinutes'> {}
@@ -12,21 +17,28 @@ export interface StatisticsResponse {
   pendingTotalHours: string;
 }
 
+export interface ListRegistriesParams {
+  company_id: string;
+  period?: string;
+  collaborator_name?: string;
+  skip?: number;
+}
+
 export abstract class RegistriesRepository {
   abstract create(registry: Registry): Promise<void>;
 
   abstract update(
-    registryId: string,
+    registry_id: string,
     data: UpdateRegistryDTO,
   ): Promise<DefaultRegistryResponse>;
 
-  abstract find(registryId: string): Promise<DefaultRegistryResponse>;
+  abstract find(registry_id: string): Promise<DefaultRegistryResponse>;
 
   abstract findCollaboratorRegistries(
-    collaboratorId: string,
+    collaborator_id: string,
     date: string | undefined,
     period: string | undefined,
   ): Promise<DefaultRegistryResponse[]>;
 
-  abstract list(companyId: string): Promise<ListRegistriesResponse[]>;
+  abstract list(params: ListRegistriesParams): Promise<ListRegistriesResponse>;
 }

@@ -6,13 +6,13 @@ export class FindCollaboratorRegistries {
   constructor(private registriesRepository: RegistriesRepository) {}
 
   async execute(
-    collaboratorId: string,
+    collaborator_id: string,
     date: string | undefined,
     period: string | undefined,
   ) {
     const registries =
       await this.registriesRepository.findCollaboratorRegistries(
-        collaboratorId,
+        collaborator_id,
         date,
         period,
       );

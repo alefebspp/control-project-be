@@ -2,6 +2,14 @@ import { ValidateAdjustmentDTO } from '@app/dtos/adjustment.dtos';
 import { Adjustment } from '@app/entities/adjustment/adjustment';
 export type { ValidateAdjustmentDTO };
 
+export interface ListAdjustmentsResponse {
+  adjustments: Omit<
+    Adjustment,
+    '_id' | 'props' | 'reviewer' | 'reviewer_response'
+  >[];
+  count?: number;
+}
+
 export interface DefaultAdjustmentResponse
   extends Omit<
     Adjustment,
@@ -15,7 +23,9 @@ export abstract class AdjustmentsRepository {
     company_id?: string,
     collaborator_id?: string,
     period?: string,
-  ): Promise<DefaultAdjustmentResponse[]>;
+    collaborator_name?: string,
+    skip?: number,
+  ): Promise<ListAdjustmentsResponse>;
 
   abstract find(adjustmentId: string): Promise<DefaultAdjustmentResponse>;
 
@@ -24,7 +34,7 @@ export abstract class AdjustmentsRepository {
   ): Promise<DefaultAdjustmentResponse>;
 
   abstract checkAdjustmentExistence(
-    registryId: string,
+    registry_id: string,
     registryType: string | undefined,
   ): Promise<DefaultAdjustmentResponse>;
 }

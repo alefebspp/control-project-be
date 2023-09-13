@@ -5,10 +5,10 @@ import { AdjustmentsRepository } from '@app/repositories/adjustments-repository'
 export class CheckAdjustmentExistence {
   constructor(private adjustmentsRepository: AdjustmentsRepository) {}
 
-  async execute(registryId: string, registryType: string) {
+  async execute(registry_id: string, registryType: string) {
     const adjustment =
       await this.adjustmentsRepository.checkAdjustmentExistence(
-        registryId,
+        registry_id,
         registryType,
       );
 

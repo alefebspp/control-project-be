@@ -4,6 +4,7 @@ import { resetDateTime } from 'src/shared/utils/transformDate';
 import { Registry } from 'src/app/entities/registry/registry';
 import {
   DefaultRegistryResponse,
+  ListRegistriesParams,
   ListRegistriesResponse,
   RegistriesRepository,
 } from 'src/app/repositories/registries-repository';
@@ -41,12 +42,12 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
   }
 
   async findCollaboratorRegistries(
-    collaboratorId: string,
+    collaborator_id: string,
     date: string | undefined,
     period: string | undefined,
   ): Promise<DefaultRegistryResponse[]> {
     let where = {
-      collaborator_id: collaboratorId,
+      collaborator_id,
     };
 
     if (period) {
@@ -77,11 +78,54 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
     return registries;
   }
 
-  async list(company_id: string): Promise<ListRegistriesResponse[]> {
+  async list({
+    company_id,
+    collaborator_name,
+    period,
+    skip,
+  }: ListRegistriesParams): Promise<ListRegistriesResponse> {
+    let where = {};
+
+    Object.assign(where, {
+      company_id,
+    });
+
+    if (collaborator_name) {
+      Object.assign(where, {
+        collaborator: {
+          name: {
+            startsWith: collaborator_name,
+            mode: 'insensitive',
+          },
+        },
+      });
+    }
+
+    if (period) {
+      const periodDate = new Date(period);
+      const nextMonth = addMonths(periodDate, 1);
+      Object.assign(where, {
+        date: {
+          gte: periodDate,
+          lt: nextMonth,
+        },
+      });
+    }
+
+    const paginationParams = {};
+    if (skip) {
+      Object.assign(paginationParams, {
+        take: 10,
+        skip: Number(skip),
+      });
+    }
+    const registriesCount = await this.prismaService.registry.count({
+      where,
+    });
+
     const registries = await this.prismaService.registry.findMany({
-      where: {
-        company_id,
-      },
+      ...paginationParams,
+      where,
       orderBy: {
         date: 'asc',
       },
@@ -90,7 +134,16 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
       },
     });
 
-    return registries;
+    if (skip) {
+      return {
+        registries,
+        count: registriesCount,
+      };
+    }
+
+    return {
+      registries,
+    };
   }
 
   async create(registry: Registry): Promise<void> {

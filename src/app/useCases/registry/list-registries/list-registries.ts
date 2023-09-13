@@ -1,16 +1,18 @@
-import { RegistriesRepository } from '@app/repositories/registries-repository';
-import { FindCompany } from '@app/useCases/company/find-company/find-company';
+import {
+  RegistriesRepository,
+  ListRegistriesParams,
+} from '@app/repositories/registries-repository';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ListRegistries {
   constructor(private registriesRepository: RegistriesRepository) {}
 
-  async execute(companyId: string) {
-    const registries = await this.registriesRepository.list(companyId);
+  async execute(params: ListRegistriesParams) {
+    const response = await this.registriesRepository.list(params);
 
     return {
-      registries,
+      ...response,
     };
   }
 }

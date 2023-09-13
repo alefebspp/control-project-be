@@ -2,6 +2,7 @@ import {
   DefaultAdjustmentResponse,
   AdjustmentsRepository,
   ValidateAdjustmentDTO,
+  ListAdjustmentsResponse,
 } from '@app/repositories/adjustments-repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -62,12 +63,12 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   }
 
   async checkAdjustmentExistence(
-    registryId: string,
+    registry_id: string,
     registryType: string,
   ): Promise<DefaultAdjustmentResponse> {
     const adjustment = await this.prismaService.adjustment.findFirst({
       where: {
-        registry_id: registryId,
+        registry_id,
         registry_type: registryType,
         status: 'PENDING',
       },
@@ -80,8 +81,21 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
     company_id?: string,
     collaborator_id?: string,
     period?: string,
-  ): Promise<DefaultAdjustmentResponse[]> {
+    collaborator_name?: string,
+    skip?: number,
+  ): Promise<ListAdjustmentsResponse> {
     let where = {};
+
+    if (collaborator_name) {
+      Object.assign(where, {
+        collaborator: {
+          name: {
+            startsWith: collaborator_name,
+            mode: 'insensitive',
+          },
+        },
+      });
+    }
 
     if (collaborator_id) {
       Object.assign(where, {
@@ -106,8 +120,23 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
       });
     }
 
-    const adjustments = await this.prismaService.adjustment.findMany({
+    const paginationParams = {};
+    if (skip) {
+      Object.assign(paginationParams, {
+        take: 10,
+        skip: Number(skip),
+      });
+    }
+    const adjustmentsCount = await this.prismaService.adjustment.count({
       where,
+    });
+
+    const adjustments = await this.prismaService.adjustment.findMany({
+      ...paginationParams,
+      where,
+      orderBy: {
+        created_at: 'asc',
+      },
       include: {
         registry: true,
         collaborator: {
@@ -133,7 +162,16 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
       },
     });
 
-    return adjustments;
+    if (skip) {
+      return {
+        adjustments,
+        count: adjustmentsCount,
+      };
+    }
+
+    return {
+      adjustments,
+    };
   }
 
   async create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse> {

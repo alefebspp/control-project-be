@@ -11,13 +11,13 @@ export class CheckAdjustmentExistenceController {
 
   @Get('/:registryId')
   async findByRegistryId(
-    @Param('registryId') registryId: string,
+    @Param('registryId') registry_id: string,
     @Query() query: CheckAdjustmentExistenceQueryParams,
   ) {
     const { registryType } = query;
 
     const adjustment = await this.checkAdjustmentExistence.execute(
-      registryId,
+      registry_id,
       registryType,
     );
 

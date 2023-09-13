@@ -10,7 +10,7 @@ export class UpdateRegistryController {
   @UseGuards(JwtAuthGuard)
   @Patch('/:registryId')
   async update(
-    @Param('registryId') registryId: string,
+    @Param('registryId') registry_id: string,
     @Body() body: UpdateRegistryDTO,
   ) {
     const {
@@ -25,7 +25,7 @@ export class UpdateRegistryController {
     } = body;
 
     const registry = await this.updateRegistry.execute({
-      registry_id: registryId,
+      registry_id,
       data: {
         start,
         start_location,
