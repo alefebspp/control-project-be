@@ -13,28 +13,12 @@ export class UpdateRegistryController {
     @Param('registryId') registry_id: string,
     @Body() body: UpdateRegistryDTO,
   ) {
-    const {
-      start,
-      start_location,
-      end,
-      end_location,
-      interval_end,
-      interval_end_location,
-      interval_start,
-      interval_start_location,
-    } = body;
-
+    const { registry_type, ...params } = body;
     const registry = await this.updateRegistry.execute({
       registry_id,
+      registry_type: registry_type,
       data: {
-        start,
-        start_location,
-        end,
-        end_location,
-        interval_end,
-        interval_end_location,
-        interval_start,
-        interval_start_location,
+        ...params,
       },
     });
 
