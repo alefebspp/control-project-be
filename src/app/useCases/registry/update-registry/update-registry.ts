@@ -1,8 +1,10 @@
 import { RegistriesRepository } from '@app/repositories/registries-repository';
+import { CreateHourRecord } from '@app/useCases/hour-record/create-hour-record/create-hour-record';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 interface UpdateRegistryProps {
   registry_id: string;
+  registry_type: string;
   data: {
     start?: string;
     start_location?: string;
@@ -17,9 +19,12 @@ interface UpdateRegistryProps {
 
 @Injectable()
 export class UpdateRegistry {
-  constructor(private registriesRepository: RegistriesRepository) {}
+  constructor(
+    private registriesRepository: RegistriesRepository,
+    private createHourRecord: CreateHourRecord,
+  ) {}
 
-  async execute({ registry_id, data }: UpdateRegistryProps) {
+  async execute({ registry_id, data, registry_type }: UpdateRegistryProps) {
     const registry = await this.registriesRepository.find(registry_id);
 
     if (!registry) {
@@ -28,22 +33,15 @@ export class UpdateRegistry {
         description: 'Does not exists a registry with the informed id',
       });
     }
+    const {id, collaborator_id} = registry
 
-    //TODO: implement a way of adjustments dont pass through this verification
-    // const currentDateEqualsRegistryDate = checkIfCurrentDateEqualsRegistryDate(
-    //   registry.date,
-    // );
-
-    // if (!currentDateEqualsRegistryDate) {
-    //   throw new BadRequestException('Cannot update registry', {
-    //     cause: new Error(),
-    //     description:
-    //       'Current date is different than registry date.Make a request',
-    //   });
-    // }
+    await this.createHourRecord.execute(collaborator_id, id, {
+      registry_type,
+      new_registry: data[registry_type],
+    });
 
     const updatedRegistry = await this.registriesRepository.update(
-      registry_id,
+      id,
       data,
     );
 

@@ -3,6 +3,8 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateRegistryDTO {
   @IsNotEmpty()
   date: Date;
+  @IsNotEmpty()
+  registry_type: string;
 
   start: string;
 

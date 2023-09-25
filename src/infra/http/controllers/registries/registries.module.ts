@@ -8,6 +8,10 @@ import { CalculateRegistriesHours } from '@app/useCases/registry/calculate-regis
 import { CreateRegistry } from '@app/useCases/registry/create-registry/create-registry';
 import { ListRegistries } from '@app/useCases/registry/list-registries/list-registries';
 import { UpdateRegistry } from '@app/useCases/registry/update-registry/update-registry';
+import { CreateHourRecord } from '@app/useCases/hour-record/create-hour-record/create-hour-record';
+import { UpdateHourRecord } from '@app/useCases/hour-record/update-hour-record/update-hour-record';
+import { FindCollaborator } from '@app/useCases/collaborator/find-collaborator/find-collaborator';
+import { UpdateCollaborator } from '@app/useCases/collaborator/update-collaborator/update-collaborator';
 
 @Module({
   imports: [DatabaseModule],
@@ -22,6 +26,10 @@ import { UpdateRegistry } from '@app/useCases/registry/update-registry/update-re
     CreateRegistry,
     ListRegistries,
     UpdateRegistry,
+    CreateHourRecord,
+    UpdateHourRecord,
+    FindCollaborator,
+    UpdateCollaborator,
   ],
 })
 export class RegistriesControllerModule {}

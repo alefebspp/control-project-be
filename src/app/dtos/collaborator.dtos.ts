@@ -21,4 +21,5 @@ export interface UpdateCollaboratorDTO {
   interval_end?: string;
   email?: string;
   manager?: boolean;
+  hours_balance?: number;
 }

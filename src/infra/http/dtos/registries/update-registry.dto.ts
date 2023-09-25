@@ -1,5 +1,10 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class UpdateRegistryDTO {
   start: string;
+
+  @IsNotEmpty()
+  registry_type: string;
 
   start_location: string;
 

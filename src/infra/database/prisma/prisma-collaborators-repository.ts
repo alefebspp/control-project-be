@@ -1,7 +1,7 @@
 import { Collaborator } from 'src/app/entities/collaborator/collaborator';
 import {
   CollaboratorsRepository,
-  CollaboratorInfo,
+  CollaboratorResponse,
 } from 'src/app/repositories/collaborators-repository';
 import { PrismaService } from './prisma.service';
 import { Injectable } from '@nestjs/common';
@@ -15,20 +15,13 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
   async update(
     data: UpdateCollaboratorDTO,
     collaboratorId: string,
-  ): Promise<CollaboratorInfo> {
+  ): Promise<CollaboratorResponse> {
     const updatedCollaborator = await this.prismaService.collaborator.update({
       where: {
         id: collaboratorId,
       },
       data: {
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        shift_start: data.shift_start,
-        shift_end: data.shift_end,
-        interval_start: data.interval_start,
-        interval_end: data.interval_end,
-        manager: data.manager,
+        ...data,
       },
     });
 
@@ -45,7 +38,7 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
     });
   }
 
-  async list(companyId: string): Promise<CollaboratorInfo[]> {
+  async list(companyId: string): Promise<CollaboratorResponse[]> {
     const collaborators = await this.prismaService.collaborator.findMany({
       where: {
         company_id: companyId,
@@ -65,7 +58,7 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
     });
   }
 
-  async findByEmail(email: string): Promise<CollaboratorInfo> {
+  async findByEmail(email: string): Promise<CollaboratorResponse> {
     const collaborator = await this.prismaService.collaborator.findUnique({
       where: {
         email,
@@ -74,7 +67,7 @@ export class PrismaCollaboratorsRepository implements CollaboratorsRepository {
     return collaborator;
   }
 
-  async find(collaboratorId: string): Promise<CollaboratorInfo> {
+  async find(collaboratorId: string): Promise<CollaboratorResponse> {
     const collaborator = await this.prismaService.collaborator.findUnique({
       where: {
         id: collaboratorId,

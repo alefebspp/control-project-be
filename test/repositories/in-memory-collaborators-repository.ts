@@ -1,7 +1,7 @@
 import { Collaborator } from '@app/entities/collaborator/collaborator';
 import {
   CollaboratorsRepository,
-  CollaboratorInfo,
+  CollaboratorResponse,
 } from '@app/repositories/collaborators-repository';
 
 export class InMemoryCollaboratorsRepository
@@ -10,7 +10,7 @@ export class InMemoryCollaboratorsRepository
   changeAvatar(fileUrl: string, collaborator_id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  findByEmail(email: string): Promise<CollaboratorInfo> {
+  findByEmail(email: string): Promise<CollaboratorResponse> {
     throw new Error('Method not implemented.');
   }
   public collaborators: Collaborator[] = [];

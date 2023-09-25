@@ -3,7 +3,7 @@ import { PrismaService } from './prisma.service';
 import { Company } from '@app/entities/company/company';
 import {
   CompaniesRepository,
-  CompanyInfo,
+  CompanyResponse,
 } from '@app/repositories/companies-repository';
 import { UpdateCompanyDTO } from '@app/dtos/company.dtos';
 
@@ -14,7 +14,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
   async update(
     data: UpdateCompanyDTO,
     companyId: string,
-  ): Promise<CompanyInfo> {
+  ): Promise<CompanyResponse> {
     const updatedCompany = await this.prismaService.company.update({
       where: {
         id: companyId,
@@ -25,7 +25,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return updatedCompany;
   }
 
-  async find(companyId: string): Promise<CompanyInfo> {
+  async find(companyId: string): Promise<CompanyResponse> {
     const company = await this.prismaService.company.findUnique({
       where: {
         id: companyId,
@@ -35,7 +35,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return company;
   }
 
-  async create(company: Company): Promise<CompanyInfo> {
+  async create(company: Company): Promise<CompanyResponse> {
     const newCompany = await this.prismaService.company.create({
       data: {
         id: company.id,

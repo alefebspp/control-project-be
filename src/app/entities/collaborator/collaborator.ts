@@ -9,6 +9,7 @@ interface CollaboratorProps {
   shift_end: string;
   interval_start: string;
   interval_end: string;
+  hours_balance?: number;
   avatar?: string | null;
   admin?: boolean;
   manager?: boolean;
@@ -78,5 +79,13 @@ export class Collaborator {
 
   public get company_id() {
     return this.props.company_id;
+  }
+
+  public get hours_balance() {
+    return this.props.hours_balance;
+  }
+
+  public set hours_balance(hours_balance: number) {
+    this.props.hours_balance = hours_balance;
   }
 }

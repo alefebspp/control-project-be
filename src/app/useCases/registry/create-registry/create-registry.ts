@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { Registry } from '../../../entities/registry/registry';
 import { RegistriesRepository } from '../../../repositories/registries-repository';
+import { CreateHourRecord } from '@app/useCases/hour-record/create-hour-record/create-hour-record';
 
 interface CreateRegistryRequest {
+  registry_type: string;
   date: Date;
   start?: string;
   start_location?: string;
@@ -18,43 +20,40 @@ interface CreateRegistryRequest {
 
 @Injectable()
 export class CreateRegistry {
-  constructor(private registriesRepository: RegistriesRepository) {}
+  constructor(
+    private registriesRepository: RegistriesRepository,
+    private createHourRecord: CreateHourRecord,
+  ) {}
   async execute(request: CreateRegistryRequest) {
-    const {
-      start,
-      start_location,
-      end,
-      end_location,
-      interval_end,
-      interval_end_location,
-      interval_start,
-      interval_start_location,
-      collaborator_id,
-      date,
-      company_id,
-    } = request;
+    const { date, registry_type, collaborator_id, start } = request;
+
+    if (registry_type != 'start') {
+      throw new BadRequestException(
+        'Um novo registro deve começar pela entrada',
+        {
+          cause: new Error(),
+          description: 'Para criar um novo registro, comece pela entrada',
+        },
+      );
+    }
 
     const newDate = new Date(date);
     newDate.setUTCHours(0, 0, 0, 0);
 
     const registry = new Registry({
+      ...request,
       date: newDate,
-      start,
-      start_location,
-      end,
-      end_location,
-      interval_end,
-      interval_end_location,
-      interval_start,
-      interval_start_location,
-      collaborator_id,
-      company_id,
     });
 
-    await this.registriesRepository.create(registry);
+    const createdRegistry = await this.registriesRepository.create(registry);
+
+    await this.createHourRecord.execute(collaborator_id, createdRegistry.id, {
+      registry_type: 'start',
+      new_registry: start,
+    });
 
     return {
-      registry,
+      registry: createdRegistry,
     };
   }
 }

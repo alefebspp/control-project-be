@@ -4,6 +4,7 @@ import { AdjustmentsControllerModule } from './controllers/adjustments/adjustmen
 import { CollaboratorsControllerModule } from './controllers/collaborators/collaborators.module';
 import { RegistriesControllerModule } from './controllers/registries/registries.module';
 import { CompaniesControllerModule } from './controllers/companies/companies.module';
+import { HourRecordControllerModule } from './controllers/hour-record/hour-record.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CompaniesControllerModule } from './controllers/companies/companies.mod
     CollaboratorsControllerModule,
     CompaniesControllerModule,
     RegistriesControllerModule,
+    HourRecordControllerModule,
   ],
 })
 export class HttpModule {}
