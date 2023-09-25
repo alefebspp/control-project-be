@@ -41,3 +41,38 @@ export function subtractRegistries(time1: string, time2: string) {
 
   return `${hoursResult}:${minutesResult}`;
 }
+
+export function secondsToHhMm(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  const hoursStr = hours.toString().padStart(2, '0');
+  const minutesStr = minutes.toString().padStart(2, '0');
+
+  return `${hoursStr}:${minutesStr}`;
+}
+
+export function hhMmToSeconds(timeStr: string): number | null {
+  const timeRegex = /^(\d{2}):(\d{2})$/;
+  const match = timeStr.match(timeRegex);
+
+  if (!match) {
+    return null; // Formato inválido
+  }
+
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+
+  if (
+    isNaN(hours) ||
+    isNaN(minutes) ||
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return null; // Horas ou minutos inválidos
+  }
+
+  return hours * 3600 + minutes * 60;
+}
