@@ -10,6 +10,10 @@ import { ValidateAdjustment } from '@app/useCases/request/validate-adjustment/va
 import { CheckAdjustmentExistence } from '@app/useCases/request/check-adjustment-existence/check-adjustment-existence';
 import { ListAdjustments } from '@app/useCases/request/list-adjustments/list-adjustments';
 import { CreateAdjustment } from '@app/useCases/request/create-adjustment/create-adjustment';
+import { CreateHourRecord } from '@app/useCases/hour-record/create-hour-record/create-hour-record';
+import { UpdateHourRecord } from '@app/useCases/hour-record/update-hour-record/update-hour-record';
+import { FindCollaborator } from '@app/useCases/collaborator/find-collaborator/find-collaborator';
+import { UpdateCollaborator } from '@app/useCases/collaborator/update-collaborator/update-collaborator';
 
 @Module({
   imports: [DatabaseModule],
@@ -26,6 +30,10 @@ import { CreateAdjustment } from '@app/useCases/request/create-adjustment/create
     CheckAdjustmentExistence,
     ListAdjustments,
     CreateAdjustment,
+    CreateHourRecord,
+    UpdateHourRecord,
+    FindCollaborator,
+    UpdateCollaborator,
   ],
 })
 export class AdjustmentsControllerModule {}
