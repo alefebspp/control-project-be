@@ -9,7 +9,7 @@ export interface ListRegistriesResponse {
   count?: number;
 }
 
-export interface DefaultRegistryResponse
+export interface RegistryResponse
   extends Omit<Registry, '_id' | 'props' | 'getDayHoursAndMinutes'> {}
 
 export interface StatisticsResponse {
@@ -25,20 +25,20 @@ export interface ListRegistriesParams {
 }
 
 export abstract class RegistriesRepository {
-  abstract create(registry: Registry): Promise<void>;
+  abstract create(registry: Registry): Promise<RegistryResponse>;
 
   abstract update(
     registry_id: string,
     data: UpdateRegistryDTO,
-  ): Promise<DefaultRegistryResponse>;
+  ): Promise<RegistryResponse>;
 
-  abstract find(registry_id: string): Promise<DefaultRegistryResponse>;
+  abstract find(registry_id: string): Promise<RegistryResponse>;
 
   abstract findCollaboratorRegistries(
     collaborator_id: string,
     date: string | undefined,
     period: string | undefined,
-  ): Promise<DefaultRegistryResponse[]>;
+  ): Promise<RegistryResponse[]>;
 
   abstract list(params: ListRegistriesParams): Promise<ListRegistriesResponse>;
 }

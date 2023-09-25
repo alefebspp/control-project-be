@@ -1,5 +1,5 @@
 import {
-  DefaultAdjustmentResponse,
+  AdjustmentResponse,
   AdjustmentsRepository,
   ValidateAdjustmentDTO,
   ListAdjustmentsResponse,
@@ -13,7 +13,7 @@ import { addMonths } from 'date-fns';
 export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   constructor(private prismaService: PrismaService) {}
 
-  async find(adjustmentId: string): Promise<DefaultAdjustmentResponse> {
+  async find(adjustmentId: string): Promise<AdjustmentResponse> {
     const adjustment = await this.prismaService.adjustment.findUnique({
       where: {
         id: adjustmentId,
@@ -25,7 +25,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
 
   async validateAdjustment(
     validateData: ValidateAdjustmentDTO,
-  ): Promise<DefaultAdjustmentResponse> {
+  ): Promise<AdjustmentResponse> {
     const evaluatedAdjustment = await this.prismaService.adjustment.update({
       where: {
         id: validateData.adjustmentId,
@@ -65,7 +65,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
   async checkAdjustmentExistence(
     registry_id: string,
     registryType: string,
-  ): Promise<DefaultAdjustmentResponse> {
+  ): Promise<AdjustmentResponse> {
     const adjustment = await this.prismaService.adjustment.findFirst({
       where: {
         registry_id,
@@ -174,7 +174,7 @@ export class PrismaAdjustmentsRepository implements AdjustmentsRepository {
     };
   }
 
-  async create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse> {
+  async create(adjustment: Adjustment): Promise<AdjustmentResponse> {
     const newAdjustment = await this.prismaService.adjustment.create({
       data: {
         new_value: adjustment.new_value,

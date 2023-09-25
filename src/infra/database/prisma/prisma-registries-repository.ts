@@ -3,19 +3,19 @@ import { addMonths } from 'date-fns';
 import { resetDateTime } from 'src/shared/utils/transformDate';
 import { Registry } from 'src/app/entities/registry/registry';
 import {
-  DefaultRegistryResponse,
+  RegistryResponse,
   ListRegistriesParams,
   ListRegistriesResponse,
   RegistriesRepository,
 } from 'src/app/repositories/registries-repository';
 import { PrismaService } from './prisma.service';
-import { UpdateRegistryDTO } from 'src/infra/http/dtos/registries/update-registry.dto';
+import { UpdateRegistryDTO } from '@app/dtos/registry.dtos';
 
 @Injectable()
 export class PrismaRegistriesRepository implements RegistriesRepository {
   constructor(private prismaService: PrismaService) {}
 
-  async find(registryId: string): Promise<DefaultRegistryResponse> {
+  async find(registryId: string): Promise<RegistryResponse> {
     const registry = await this.prismaService.registry.findUnique({
       where: {
         id: registryId,
@@ -28,7 +28,7 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
   async update(
     registryId: string,
     data: UpdateRegistryDTO,
-  ): Promise<DefaultRegistryResponse> {
+  ): Promise<RegistryResponse> {
     const registry = await this.prismaService.registry.update({
       where: {
         id: registryId,
@@ -45,7 +45,7 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
     collaborator_id: string,
     date: string | undefined,
     period: string | undefined,
-  ): Promise<DefaultRegistryResponse[]> {
+  ): Promise<RegistryResponse[]> {
     let where = {
       collaborator_id,
     };
@@ -146,8 +146,8 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
     };
   }
 
-  async create(registry: Registry): Promise<void> {
-    await this.prismaService.registry.create({
+  async create(registry: Registry): Promise<RegistryResponse> {
+    const createdRegistry = await this.prismaService.registry.create({
       data: {
         id: registry.id,
         date: registry.date,
@@ -163,5 +163,7 @@ export class PrismaRegistriesRepository implements RegistriesRepository {
         company_id: registry.company_id,
       },
     });
+
+    return createdRegistry;
   }
 }

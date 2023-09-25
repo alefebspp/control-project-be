@@ -10,14 +10,14 @@ export interface ListAdjustmentsResponse {
   count?: number;
 }
 
-export interface DefaultAdjustmentResponse
+export interface AdjustmentResponse
   extends Omit<
     Adjustment,
     '_id' | 'props' | 'reviewer' | 'reviewer_response'
   > {}
 
 export abstract class AdjustmentsRepository {
-  abstract create(adjustment: Adjustment): Promise<DefaultAdjustmentResponse>;
+  abstract create(adjustment: Adjustment): Promise<AdjustmentResponse>;
 
   abstract list(
     company_id?: string,
@@ -27,14 +27,14 @@ export abstract class AdjustmentsRepository {
     skip?: number,
   ): Promise<ListAdjustmentsResponse>;
 
-  abstract find(adjustmentId: string): Promise<DefaultAdjustmentResponse>;
+  abstract find(adjustmentId: string): Promise<AdjustmentResponse>;
 
   abstract validateAdjustment(
     validateData: ValidateAdjustmentDTO,
-  ): Promise<DefaultAdjustmentResponse>;
+  ): Promise<AdjustmentResponse>;
 
   abstract checkAdjustmentExistence(
     registry_id: string,
     registryType: string | undefined,
-  ): Promise<DefaultAdjustmentResponse>;
+  ): Promise<AdjustmentResponse>;
 }
