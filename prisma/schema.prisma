@@ -10,6 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum HourRecordType {
+  ADDITIONAL
+  PENDING
+}
+
+model HourRecord {
+  id              String         @id
+  type            HourRecordType
+  seconds         Int
+  registry_type   String
+  collaborator_id String
+  registry_id     String
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
+
+  collaborator Collaborator @relation(fields: [collaborator_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  registry     Registry     @relation(fields: [registry_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("hour_record")
+}
+
 model Registry {
   id                      String   @id
   date                    DateTime
@@ -25,8 +46,9 @@ model Registry {
   company_id              String?
 
   adjustment   Adjustment[]
-  collaborator Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  collaborator Collaborator? @relation(fields: [collaborator_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   company      Company?      @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  HourRecord   HourRecord[]
 
   @@map("registries")
 }
@@ -56,7 +78,7 @@ model Adjustment {
 
   registry            Registry?     @relation(fields: [registry_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
   company             Company?      @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  collaborator        Collaborator? @relation("CollaboratorAdjustment", fields: [collaborator_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  collaborator        Collaborator? @relation("CollaboratorAdjustment", fields: [collaborator_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   adjustment_reviewer Collaborator? @relation("ReviewerAdjustment", fields: [reviewer], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("adjustments")
@@ -78,11 +100,13 @@ model Collaborator {
   manager        Boolean  @default(false)
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
+  hours_balance  Int      @default(0)
 
   registries              Registry[]
   collaborator_adjustment Adjustment[] @relation("CollaboratorAdjustment")
   reviewer_adjustment     Adjustment[] @relation("ReviewerAdjustment")
   company                 Company?     @relation(fields: [company_id], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  Hours                   HourRecord[]
 
   @@map("collaborators")
 }
