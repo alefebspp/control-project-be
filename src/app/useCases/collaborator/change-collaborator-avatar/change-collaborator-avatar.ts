@@ -9,27 +9,24 @@ export class ChangeCollaboratorAvatar {
     private cloudStorageService: CloudStorageService,
   ) {}
 
-  async execute(fileUrl: string, collaborator_id: string) {
+  async execute(file: Express.Multer.File, collaborator_id: string) {
     const collaborator = await this.collaboratorsRepository.find(
       collaborator_id,
     );
+
     if (collaborator.avatar != null) {
-      const splitedCollaboratorAvatarString = collaborator.avatar.split('/');
-
-      const collaboratorAvatarFileName =
-        splitedCollaboratorAvatarString[
-          splitedCollaboratorAvatarString.length - 1
-        ];
-
       const avatarExists = await this.cloudStorageService.findFile(
-        collaboratorAvatarFileName,
+        collaborator.id,
       );
-
       if (avatarExists) {
-        await this.cloudStorageService.removeFile(collaboratorAvatarFileName);
+        await this.cloudStorageService.removeFile(collaborator.id);
       }
     }
+    const { publicUrl } = await this.cloudStorageService.uploadFile(
+      file,
+      collaborator.id,
+    );
 
-    await this.collaboratorsRepository.changeAvatar(fileUrl, collaborator.id);
+    await this.collaboratorsRepository.changeAvatar(publicUrl, collaborator.id);
   }
 }

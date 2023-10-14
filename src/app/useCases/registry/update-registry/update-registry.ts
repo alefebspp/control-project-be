@@ -33,15 +33,15 @@ export class UpdateRegistry {
         description: 'Does not exists a registry with the informed id',
       });
     }
-    const {id, collaborator_id} = registry
+    const { collaborator_id } = registry;
 
-    await this.createHourRecord.execute(collaborator_id, id, {
+    await this.createHourRecord.execute(collaborator_id, registry.id, {
       registry_type,
       new_registry: data[registry_type],
     });
 
     const updatedRegistry = await this.registriesRepository.update(
-      id,
+      registry.id,
       data,
     );
 

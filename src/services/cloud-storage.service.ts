@@ -1,59 +1,53 @@
-import { Bucket, Storage } from '@google-cloud/storage';
-import { randomUUID } from 'node:crypto';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class CloudStorageService {
-  private bucket: Bucket;
-  private storage: Storage;
-
   constructor() {
-    this.storage = new Storage({
-      projectId: process.env.GCS_PROJECTID,
-      credentials: {
-        type: process.env.GCS_TYPE,
-        private_key: process.env.GCS_PRIVATE_KEY,
-        client_email: process.env.GCS_CLIENT_EMAIL,
-        client_id: process.env.GCS_CLIENT_ID,
-      },
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
     });
-    this.bucket = this.storage.bucket(process.env.GCS_BUCKET_NAME);
   }
 
-  async uploadFile(uploadedFile: Express.Multer.File): Promise<any> {
-    const fileName = `${randomUUID()}-${uploadedFile.originalname}`;
-
-    const file = this.bucket.file(fileName);
+  async uploadFile(uploadedFile: Express.Multer.File, collaborator_id: string) {
     try {
-      await file.save(uploadedFile.buffer, {
-        contentType: uploadedFile.mimetype,
+      const public_id = collaborator_id;
+      const b64 = Buffer.from(uploadedFile.buffer).toString('base64');
+      let dataURI = 'data:' + uploadedFile.mimetype + ';base64,' + b64;
+
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: 'collaborators_avatar',
+        public_id,
+        resource_type: 'auto',
       });
+
+      return {
+        publicUrl: result.url,
+      };
     } catch (error) {
-      throw new BadRequestException(error?.message);
-    }
-    return {
-      ...file.metadata,
-      publicUrl: `https://storage.googleapis.com/${this.bucket.name}/${file.name}`,
-    };
-  }
-
-  async findFile(fileName: string): Promise<boolean> {
-    const file = this.bucket.file(fileName);
-
-    try {
-      const [fileExists] = await file.exists();
-
-      return fileExists;
-    } catch (error) {
+      console.log(error);
       throw new BadRequestException(error?.message);
     }
   }
 
-  async removeFile(fileName: string): Promise<void> {
-    const file = this.bucket.file(fileName);
-
+  async findFile(publicId: string): Promise<boolean> {
     try {
-      await file.delete();
+      const result = await cloudinary.search
+        .expression(`public_id: collaborators_avatar/${publicId}`)
+        .max_results(1)
+        .execute();
+
+      return result.resources.length > 0;
+    } catch (error) {
+      throw new BadRequestException(error?.message);
+    }
+  }
+
+  async removeFile(publicId: string): Promise<void> {
+    try {
+      await cloudinary.uploader.destroy(`collaborators_avatar/${publicId}`);
     } catch (error) {
       throw new BadRequestException(error?.message);
     }
